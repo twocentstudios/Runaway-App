@@ -18,6 +18,7 @@
 		348CDBC11D024A280030523A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		348CDBC41D024A280030523A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		348CDBC61D024A280030523A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		348CDBCC1D0282D50030523A /* processalert-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "processalert-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +55,7 @@
 				348CDBC11D024A280030523A /* Assets.xcassets */,
 				348CDBC31D024A280030523A /* MainMenu.xib */,
 				348CDBC61D024A280030523A /* Info.plist */,
+				348CDBCC1D0282D50030523A /* processalert-Bridging-Header.h */,
 			);
 			path = processalert;
 			sourceTree = "<group>";
@@ -237,6 +239,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.processalert;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/processalert/processalert-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -249,6 +252,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.processalert;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/processalert/processalert-Bridging-Header.h";
 			};
 			name = Release;
 		};
