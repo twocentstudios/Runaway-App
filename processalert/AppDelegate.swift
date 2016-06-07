@@ -15,18 +15,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
     
-    let numberOfSamples = 6
-    let cpuThreshold = 50.0
-    let delay: NSTimeInterval = 3 // seconds
-    let remainingSamples = 30
-    let alertThresholdMinutes = 30
+    var settings = Settings()
     var processes: ProcessHash = [:]
     
     var timer: RepeatingTimer!
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        timer = RepeatingTimer(interval: delay, leeway: 0, queue: dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) { [unowned self] in
-            self.processes = self.tick(self.processes)
+        let notificationCenter = NSUserNotificationCenter.defaultUserNotificationCenter()
+        
+        timer = RepeatingTimer(interval: settings.delay, leeway: 0, queue: dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) { [unowned self] in
+            let (updatedProcesses, pendingNotifications) = self.tick(self.processes, settings: self.settings)
+            
+            self.processes = updatedProcesses
+            
+            pendingNotifications.forEach { notificationCenter.deliverNotification($0) }
         }
     }
 
@@ -34,18 +36,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         timer.cancel()
     }
     
-    private func tick(processes: ProcessHash) -> ProcessHash {
-        let notificationCenter = NSUserNotificationCenter.defaultUserNotificationCenter()
+    private func tick(processes: ProcessHash, settings: Settings) -> (ProcessHash, [NSUserNotification]) {
         let psOutput = shell(ProcessStatus.launchPath, arguments: ProcessStatus.arguments)
         let rawProcesses = ProcessStatus.parse(psOutput)
         let mergedProcesses = mergeRawProcesses(processes, rawProcesses: rawProcesses)
-        let filtered = filterLatestSamples(mergedProcesses, numberOfSamples: numberOfSamples, threshold: cpuThreshold)
-        let updatedProcesses = sendNotifications(mergedProcesses, overProcesses: filtered, notificationCenter: notificationCenter)
-        let prunedSamplesFromProcesses = pruneSamples(updatedProcesses, remainingSamples: remainingSamples)
-        return prunedSamplesFromProcesses
+        let filtered = filterLatestSamples(mergedProcesses, numberOfSamples: settings.numberOfSamples, threshold: settings.cpuThreshold)
+        let (updatedProcesses, pendingNotifications) = outgoingNotifications(mergedProcesses, overProcesses: filtered, alertThresholdMinutes: settings.alertThresholdMinutes, delay: settings.delay, numberOfSamples: settings.numberOfSamples, cpuThreshold: settings.cpuThreshold)
+        let prunedSamplesFromProcesses = pruneSamples(updatedProcesses, remainingSamples: settings.remainingSamples)
+        
+        return (prunedSamplesFromProcesses, pendingNotifications)
     }
     
-    private func sendNotifications(processes: ProcessHash, overProcesses: [ProcessID: CPUPercentage], notificationCenter: NSUserNotificationCenter) -> ProcessHash {
+    private func outgoingNotifications(processes: ProcessHash, overProcesses: [ProcessID: CPUPercentage], alertThresholdMinutes: Int, delay: NSTimeInterval, numberOfSamples: Int, cpuThreshold: CPUPercentage) -> (ProcessHash, [NSUserNotification]) {
         let now = NSDate()
         var updatedProcesses = processes
         var pendingNotifications: [NSUserNotification] = []
@@ -57,23 +59,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let notification = createUserNotification(
                 getProcessName(processes, processId: processId),
                 averagedTimePeriod: delay * Double(numberOfSamples),
-                cpuLoad: cpuLoad)
+                cpuLoad: cpuLoad,
+                cpuThreshold: cpuThreshold)
             pendingNotifications.append(notification)
             
             // Update process lastAlertAt
             process.lastAlertAt = now
             updatedProcesses[processId] = process
-            
-            print(processes[processId])
         }
         
-        // Deliver notifications
-        pendingNotifications.forEach { notificationCenter.deliverNotification($0) }
-        
-        return updatedProcesses
+        return (updatedProcesses, pendingNotifications)
     }
     
-    private func createUserNotification(processName: String, averagedTimePeriod: NSTimeInterval, cpuLoad: CPUPercentage) -> NSUserNotification {
+    private func createUserNotification(processName: String, averagedTimePeriod: NSTimeInterval, cpuLoad: CPUPercentage, cpuThreshold: CPUPercentage) -> NSUserNotification {
         let notificationTitle = "\(processName) using over \(cpuThreshold)% CPU"
         let notificationText = "Average \(cpuLoad)% CPU for the last \(Int(averagedTimePeriod)) seconds."
         let notification = NSUserNotification()

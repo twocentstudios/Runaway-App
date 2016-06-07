@@ -16,6 +16,7 @@
 		348CDBD41D07454E0030523A /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD31D07454E0030523A /* Shell.swift */; };
 		348CDBD61D0745910030523A /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD51D0745910030523A /* Timer.swift */; };
 		348CDBD81D0747ED0030523A /* ProcessHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD71D0747ED0030523A /* ProcessHash.swift */; };
+		348CDBDA1D0749A40030523A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD91D0749A40030523A /* Settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		348CDBD31D07454E0030523A /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		348CDBD51D0745910030523A /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		348CDBD71D0747ED0030523A /* ProcessHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessHash.swift; sourceTree = "<group>"; };
+		348CDBD91D0749A40030523A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				348CDBBF1D024A280030523A /* AppDelegate.swift */,
+				348CDBD91D0749A40030523A /* Settings.swift */,
 				348CDBCD1D0743E60030523A /* Process.swift */,
 				348CDBD71D0747ED0030523A /* ProcessHash.swift */,
 				348CDBD11D0744B40030523A /* RawProcess.swift */,
@@ -150,6 +153,7 @@
 			files = (
 				348CDBD81D0747ED0030523A /* ProcessHash.swift in Sources */,
 				348CDBD21D0744B40030523A /* RawProcess.swift in Sources */,
+				348CDBDA1D0749A40030523A /* Settings.swift in Sources */,
 				348CDBC01D024A280030523A /* AppDelegate.swift in Sources */,
 				348CDBD41D07454E0030523A /* Shell.swift in Sources */,
 				348CDBD61D0745910030523A /* Timer.swift in Sources */,
