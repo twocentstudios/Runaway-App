@@ -13,14 +13,20 @@ typealias RawProcesses = [RawProcess]
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @IBOutlet weak var window: NSWindow!
-    
+    @IBOutlet weak var statusMenu: NSMenu!
+
+    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
+
     var settings = Settings()
     var processes: ProcessHash = [:]
     
     var timer: RepeatingTimer!
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        
+        statusItem.title = "Runaway Train"
+        statusItem.menu = statusMenu
+        
         let notificationCenter = NSUserNotificationCenter.defaultUserNotificationCenter()
         
         timer = RepeatingTimer(interval: settings.delay, leeway: 0, queue: dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) { [unowned self] in
@@ -34,6 +40,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(aNotification: NSNotification) {
         timer.cancel()
+    }
+    
+    @IBAction func quitClicked(sender: NSMenuItem) {
+        NSApplication.sharedApplication().terminate(self)
     }
     
     private func tick(processes: ProcessHash, settings: Settings) -> (ProcessHash, [NSUserNotification]) {
