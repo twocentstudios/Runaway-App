@@ -10,6 +10,12 @@
 		348CDBC01D024A280030523A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBBF1D024A280030523A /* AppDelegate.swift */; };
 		348CDBC21D024A280030523A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 348CDBC11D024A280030523A /* Assets.xcassets */; };
 		348CDBC51D024A280030523A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348CDBC31D024A280030523A /* MainMenu.xib */; };
+		348CDBCE1D0743E60030523A /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBCD1D0743E60030523A /* Process.swift */; };
+		348CDBD01D0744110030523A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBCF1D0744110030523A /* Dictionary.swift */; };
+		348CDBD21D0744B40030523A /* RawProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD11D0744B40030523A /* RawProcess.swift */; };
+		348CDBD41D07454E0030523A /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD31D07454E0030523A /* Shell.swift */; };
+		348CDBD61D0745910030523A /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD51D0745910030523A /* Timer.swift */; };
+		348CDBD81D0747ED0030523A /* ProcessHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD71D0747ED0030523A /* ProcessHash.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +25,12 @@
 		348CDBC41D024A280030523A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		348CDBC61D024A280030523A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		348CDBCC1D0282D50030523A /* processalert-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "processalert-Bridging-Header.h"; sourceTree = "<group>"; };
+		348CDBCD1D0743E60030523A /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
+		348CDBCF1D0744110030523A /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		348CDBD11D0744B40030523A /* RawProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawProcess.swift; sourceTree = "<group>"; };
+		348CDBD31D07454E0030523A /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
+		348CDBD51D0745910030523A /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		348CDBD71D0747ED0030523A /* ProcessHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessHash.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +64,12 @@
 			isa = PBXGroup;
 			children = (
 				348CDBBF1D024A280030523A /* AppDelegate.swift */,
+				348CDBCD1D0743E60030523A /* Process.swift */,
+				348CDBD71D0747ED0030523A /* ProcessHash.swift */,
+				348CDBD11D0744B40030523A /* RawProcess.swift */,
+				348CDBCF1D0744110030523A /* Dictionary.swift */,
+				348CDBD31D07454E0030523A /* Shell.swift */,
+				348CDBD51D0745910030523A /* Timer.swift */,
 				348CDBC11D024A280030523A /* Assets.xcassets */,
 				348CDBC31D024A280030523A /* MainMenu.xib */,
 				348CDBC61D024A280030523A /* Info.plist */,
@@ -130,7 +148,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				348CDBD81D0747ED0030523A /* ProcessHash.swift in Sources */,
+				348CDBD21D0744B40030523A /* RawProcess.swift in Sources */,
 				348CDBC01D024A280030523A /* AppDelegate.swift in Sources */,
+				348CDBD41D07454E0030523A /* Shell.swift in Sources */,
+				348CDBD61D0745910030523A /* Timer.swift in Sources */,
+				348CDBCE1D0743E60030523A /* Process.swift in Sources */,
+				348CDBD01D0744110030523A /* Dictionary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
