@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var processes: ProcessHash = [:]
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        
+
         while(true) {
             self.processes = tick(processes)
             sleep(UInt32(delay))
@@ -79,7 +79,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // http://stackoverflow.com/questions/27556807/swift-pointer-problems-with-mach-task-basic-info
     private func getProcessCPUPercentage(processId: ProcessID) -> CPUPercentage {
         let pid: pid_t = Int32(processId)
-        var port: task_t  // UInt32
+        var port: task_t = 0  // UInt32
         var kerr: kern_return_t = KERN_FAILURE
         kerr = withUnsafeMutablePointer(&port) {
             task_for_pid(mach_task_self_, pid, $0)
@@ -87,23 +87,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if kerr != KERN_SUCCESS { printMachError(pid, kerr: kerr); return 0.0 } // TODO: Error handling
         
-        var tinfo: task_info_data_t
+        var tinfo: task_basic_info = task_basic_info()
         var task_info_count: mach_msg_type_number_t = UInt32(TASK_INFO_MAX) // UInt32
         
         kerr = withUnsafeMutablePointer(&tinfo) {
-            task_info(port, TASK_BASIC_INFO, $0, &task_info_count)
+            task_info(port, task_flavor_t(TASK_BASIC_INFO), task_info_t($0), &task_info_count)
         }
         
         if kerr != KERN_SUCCESS { printMachError(pid, kerr: kerr); return 0.0 } // TODO: Error handling
 
-        let basic_info: task_basic_info_t = tinfo
-        var thread_list: thread_array_t
-        var thread_count: mach_msg_type_number_t
+        let basic_info: task_basic_info = tinfo
+        var thread_list: thread_array_t = UnsafeMutablePointer(nil)
+        var thread_count: mach_msg_type_number_t = 0
         
-        var thinfo: thread_info_data_t
-        var thread_info_count: mach_msg_type_number_t
+        var thinfo: thread_basic_info = thread_basic_info()
+        var thread_info_count: mach_msg_type_number_t = UInt32(THREAD_INFO_MAX)
         
-        var basic_info_th: thread_basic_info_t
+        var basic_info_th: thread_basic_info
         var stat_thread: UInt32 = 0 // Mach threads
         
         // get threads in the task
@@ -117,109 +117,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             stat_thread += thread_count
         }
         
-        var tot_sec: CLong = 0
-        var tot_usec: CLong = 0
-        var tot_cpu: CLong = 0
+        var tot_sec: Int = 0
+        var tot_usec: Int = 0
+        var tot_cpu: Int = 0
         
         for i in 0..<thread_count {
-            thread_info_count = UInt32(THREAD_INFO_MAX)
-            kerr = withUnsafeMutablePointer(&thread_info_count, {
-                thread_info(thread_list[i], THREAD_BASIC_INFO, thinfo, $0)
+            let thread = thread_list[Int(i)]
+            
+            kerr = withUnsafeMutablePointer(&thinfo, {
+                thread_info(thread, thread_flavor_t(THREAD_BASIC_INFO), thread_info_t($0), &thread_info_count)
             })
             
             if kerr != KERN_SUCCESS { printMachError(pid, kerr: kerr); return 0.0 } // TODO: Error handling
             
             basic_info_th = thinfo
             
-            if !(basic_info_th.flags & TH_FLAGS_IDLE) {
-                tot_sec = tot_sec + basic_info_th.user_time.seconds + basic_info_th.system_time.seconds
-                tot_usec = tot_usec + basic_info_th.user_time.microseconds + basic_info_th.system_time.microseconds
-                tot_cpu = tot_cpu + basic_info_th.cpu_usage
+            if (basic_info_th.flags & TH_FLAGS_IDLE) == 0 {
+                tot_sec = Int(tot_sec + basic_info_th.user_time.seconds + basic_info_th.system_time.seconds)
+                tot_usec = Int(tot_usec + basic_info_th.user_time.microseconds + basic_info_th.system_time.microseconds)
+                tot_cpu = Int(tot_cpu + basic_info_th.cpu_usage)
             }
         }
         
         return CPUPercentage(tot_cpu)
     }
-
-//        pid_t pid = ...;   //-- this is the process id you need info for
-//        task_t port;
-//        task_for_pid(mach_task_self(), pid, &port);
-//        
-//        task_info_data_t tinfo;
-//        mach_msg_type_number_t task_info_count; // UInt32
-//        
-//        task_info_count = TASK_INFO_MAX;
-//        kr = task_info(port, TASK_BASIC_INFO, (task_info_t)tinfo, &task_info_count);
-//        if (kr != KERN_SUCCESS) {
-//            continue; //-- skip this task
-//        }
-//        
-//        task_basic_info_t        basic_info;
-//        thread_array_t         thread_list;
-//        mach_msg_type_number_t thread_count;
-//        
-//        thread_info_data_t     thinfo;
-//        mach_msg_type_number_t thread_info_count;
-//        
-//        thread_basic_info_t basic_info_th;
-//        uint32_t stat_thread = 0; // Mach threads
-//        
-//        basic_info = (task_basic_info_t)tinfo;
-//        
-//        // get threads in the task
-//        kr = task_threads(port, &thread_list, &thread_count);
-//        if (kr != KERN_SUCCESS) {
-//            <HANDLE ERROR>
-//            continue;
-//        }
-//        if (thread_count > 0)
-//        stat_thread += thread_count;
-//        
-//        long tot_sec = 0;
-//        long tot_usec = 0;
-//        long tot_cpu = 0;
-//        int j;
-//        
-//        for (j = 0; j < thread_count; j++) {
-//            thread_info_count = THREAD_INFO_MAX;
-//            kr = thread_info(thread_list[j], THREAD_BASIC_INFO,
-//                             (thread_info_t)thinfo, &thread_info_count);
-//            if (kr != KERN_SUCCESS) {
-//                <HANDLE ERROR>
-//                continue;
-//            }
-//            basic_info_th = (thread_basic_info_t)thinfo;
-//            
-//            
-//            if (!(basic_info_th->flags & TH_FLAGS_IDLE)) {
-//                tot_sec = tot_sec + basic_info_th->user_time.seconds + basic_info_th->system_time.seconds;
-//                tot_usec = tot_usec + basic_info_th->system_time.microseconds + basic_info_th->system_time.microseconds;
-//                tot_cpu = tot_cpu + basic_info_th->cpu_usage;
-//            }
-//            
-//        } // for each thread
-//        
-//        func report_memory() {
-//            var info = mach_task_basic_info()
-//            var count = mach_msg_type_number_t(sizeofValue(info))/4
-//            
-//            let kerr: kern_return_t = withUnsafeMutablePointer(&info) {
-//                
-//                task_info(mach_task_self_,
-//                          task_flavor_t(MACH_TASK_BASIC_INFO),
-//                          task_info_t($0),
-//                          &count)
-//                
-//            }
-//            
-//            if kerr == KERN_SUCCESS {
-//                println("Memory in use (in bytes): \(info.resident_size)")
-//            }
-//            else {
-//                println("Error with task_info(): " +
-//                    (String.fromCString(mach_error_string(kerr)) ?? "unknown error"))
-//            }
-//        }
     
     private func averageLatestSamples(processes: ProcessHash, numberOfSamples: Int) -> [ProcessID: CPUPercentage] {
         let processLoadArray = processes
