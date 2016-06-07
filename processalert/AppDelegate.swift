@@ -11,6 +11,9 @@ import Cocoa
 typealias CPUPercentage = Double
 typealias ProcessID = Int
 typealias ProcessHash = [ProcessID: Process]
+typealias RawProcesses = [RawProcess]
+
+// ps -acwwwxo pid="",pcpu="",command=""
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -18,16 +21,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     
     let numberOfAveragedSamples = 10
-    let cpuThreshold = 0.5
-    let delay: Int = 3 // seconds
+    let cpuThreshold = 10.0
+    let delay: NSTimeInterval = 3 // seconds
     let remainingSamples = 10
     var processes: ProcessHash = [:]
+    
+    var timer: dispatch_source_t!
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-
-        while(true) {
-            self.processes = tick(processes)
-            sleep(UInt32(delay))
+        
+        timer = repeatingTimer(delay, leeway: 0, queue: dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) { [unowned self] in
+            self.processes = self.tick(self.processes)
         }
     }
 
@@ -35,111 +39,62 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
     
-    private func tick(processes: ProcessHash) -> ProcessHash {
-        let notificationCenter = NSUserNotificationCenter.defaultUserNotificationCenter()
-        let runningApplications = getRunningApplications()
-        let merged = mergeApplications(processes, applications: runningApplications)
-        let addedSamplesArray = merged.map { (processId: ProcessID, process: Process) -> (ProcessID, Process) in
-            let cpuPercentage = getProcessCPUPercentage(processId)
-            var updatedProcess = process
-            updatedProcess.appendSample(cpuPercentage)
-            return (processId, updatedProcess)
-        }
-        let addedSamples = Dictionary(addedSamplesArray)
-        let processAverageCPU = averageLatestSamples(addedSamples, numberOfSamples: 10)
-        let filtered = filterAverages(processAverageCPU, threshold: cpuThreshold)
-        let updatedProcesses = sendNotifications(addedSamples, overProcesses: filtered, notificationCenter: notificationCenter)
-        let prunedProcesses = pruneProcesses(updatedProcesses, remainingSamples: remainingSamples)
-        return prunedProcesses
-    }
-
-    private func getRunningApplications() -> [NSRunningApplication] {
-        return NSWorkspace.sharedWorkspace().runningApplications
+    private func shell(launchPath: String, arguments: [String]) -> String {
+        let task = NSTask()
+        task.launchPath = launchPath
+        task.arguments = arguments
+        
+        let pipe = NSPipe()
+        task.standardOutput = pipe
+        task.launch()
+        
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+        
+        return output
     }
     
-    private func mergeApplications(processes: ProcessHash, applications: [NSRunningApplication]) -> ProcessHash {
-        var outProcesses = processes;
-        for application in applications {
-            let maybeProcess = outProcesses[Int(application.processIdentifier)]
-            if maybeProcess == nil {
-                let process = Process(application: application)
-                outProcesses[process.processId] = process
+    private func parseProcessStatus(input: String) -> RawProcesses {
+        let rawProcesses = input
+            .componentsSeparatedByString("\n")
+            .filter({ !$0.isEmpty })
+            .map { line -> RawProcess in
+                let components = line.componentsSeparatedByString(" ").filter({ !$0.isEmpty })
+                let pid = Int(components[0])!
+                let sample = CPUPercentage(components[1])!
+                let name = components.suffixFrom(2).reduce("", combine:{ $0 + " " + $1 })
+                let process = RawProcess(processId: pid, name: name, sample: sample)
+                return process
+            }
+        return rawProcesses
+    }
+    
+    private func mergeRawProcesses(rawProcesses: RawProcesses, processes: ProcessHash) -> ProcessHash {
+        var outProcesses = processes
+        for rawProcess in rawProcesses {
+            if let process = outProcesses[rawProcess.processId] {
+                var outProcess = process
+                outProcess.appendSample(rawProcess.sample)
+                outProcesses[outProcess.processId] = outProcess
+            } else {
+                let outProcess = Process(rawProcess: rawProcess)
+                outProcesses[outProcess.processId] = outProcess
             }
         }
         // TODO: remove quit processes
         return outProcesses
     }
     
-    private func printMachError(pid: pid_t, kerr: Int32) {
-        let machString = String.fromCString(mach_error_string(kerr)) ?? "unknown error"
-        print("Error pid: \(pid) - \(machString)")
-    }
-    
-    // http://stackoverflow.com/questions/6788274/ios-mac-cpu-usage-for-thread
-    // http://stackoverflow.com/questions/27556807/swift-pointer-problems-with-mach-task-basic-info
-    private func getProcessCPUPercentage(processId: ProcessID) -> CPUPercentage {
-        let pid: pid_t = Int32(processId)
-        var port: task_t = 0  // UInt32
-        var kerr: kern_return_t = KERN_FAILURE
-        kerr = withUnsafeMutablePointer(&port) {
-            task_for_pid(mach_task_self_, pid, $0)
-        }
-        
-        if kerr != KERN_SUCCESS { printMachError(pid, kerr: kerr); return 0.0 } // TODO: Error handling
-        
-        var tinfo: task_basic_info = task_basic_info()
-        var task_info_count: mach_msg_type_number_t = UInt32(TASK_INFO_MAX) // UInt32
-        
-        kerr = withUnsafeMutablePointer(&tinfo) {
-            task_info(port, task_flavor_t(TASK_BASIC_INFO), task_info_t($0), &task_info_count)
-        }
-        
-        if kerr != KERN_SUCCESS { printMachError(pid, kerr: kerr); return 0.0 } // TODO: Error handling
-
-        let basic_info: task_basic_info = tinfo
-        var thread_list: thread_array_t = UnsafeMutablePointer(nil)
-        var thread_count: mach_msg_type_number_t = 0
-        
-        var thinfo: thread_basic_info = thread_basic_info()
-        var thread_info_count: mach_msg_type_number_t = UInt32(THREAD_INFO_MAX)
-        
-        var basic_info_th: thread_basic_info
-        var stat_thread: UInt32 = 0 // Mach threads
-        
-        // get threads in the task
-        kerr = withUnsafeMutablePointers(&thread_list, &thread_count, {
-            task_threads(port, $0, $1)
-        })
-        
-        if kerr != KERN_SUCCESS { printMachError(pid, kerr: kerr); return 0.0 } // TODO: Error handling
-
-        if (thread_count > 0) {
-            stat_thread += thread_count
-        }
-        
-        var tot_sec: Int = 0
-        var tot_usec: Int = 0
-        var tot_cpu: Int = 0
-        
-        for i in 0..<thread_count {
-            let thread = thread_list[Int(i)]
-            
-            kerr = withUnsafeMutablePointer(&thinfo, {
-                thread_info(thread, thread_flavor_t(THREAD_BASIC_INFO), thread_info_t($0), &thread_info_count)
-            })
-            
-            if kerr != KERN_SUCCESS { printMachError(pid, kerr: kerr); return 0.0 } // TODO: Error handling
-            
-            basic_info_th = thinfo
-            
-            if (basic_info_th.flags & TH_FLAGS_IDLE) == 0 {
-                tot_sec = Int(tot_sec + basic_info_th.user_time.seconds + basic_info_th.system_time.seconds)
-                tot_usec = Int(tot_usec + basic_info_th.user_time.microseconds + basic_info_th.system_time.microseconds)
-                tot_cpu = Int(tot_cpu + basic_info_th.cpu_usage)
-            }
-        }
-        
-        return CPUPercentage(tot_cpu)
+    private func tick(processes: ProcessHash) -> ProcessHash {
+        let notificationCenter = NSUserNotificationCenter.defaultUserNotificationCenter()
+        let psOutput = shell("/bin/ps", arguments: ["-acwwwxo", "pid=,pcpu=,command="])
+        let rawProcesses = parseProcessStatus(psOutput)
+        let mergedProcesses = mergeRawProcesses(rawProcesses, processes: processes)
+        let processAverageCPU = averageLatestSamples(mergedProcesses, numberOfSamples: 10)
+        let filtered = filterAverages(processAverageCPU, threshold: cpuThreshold)
+        let updatedProcesses = sendNotifications(mergedProcesses, overProcesses: filtered, notificationCenter: notificationCenter)
+        let prunedSamplesFromProcesses = pruneSamples(updatedProcesses, remainingSamples: remainingSamples)
+        return prunedSamplesFromProcesses
     }
     
     private func averageLatestSamples(processes: ProcessHash, numberOfSamples: Int) -> [ProcessID: CPUPercentage] {
@@ -148,6 +103,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 let truncatedSamples = Array(process.samples.suffix(numberOfSamples))
                 return (processId, truncatedSamples)
             }
+            .filter({ $1.count == numberOfSamples })
             .map { (processID: ProcessID, samples: [CPUPercentage]) -> (ProcessID, CPUPercentage) in
                 let total = samples.reduce(0, combine: +)
                 let count = samples.count
@@ -177,7 +133,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             // Configure local notification
             let notification = createUserNotification(
                 getProcessName(processes, processId: processId),
-                averagedTimePeriod: delay * numberOfAveragedSamples,
+                averagedTimePeriod: delay * Double(numberOfAveragedSamples),
                 cpuLoad: cpuLoad)
             pendingNotifications.append(notification)
             
@@ -185,6 +141,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             var process = processes[processId]
             process?.lastAlertAt = now
             updatedProcesses[processId] = process
+            
+            // print(processes[processId])
         }
         
         // Schedule notifications
@@ -193,15 +151,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return updatedProcesses
     }
     
-    private func createUserNotification(processName: String, averagedTimePeriod: Int, cpuLoad: CPUPercentage) -> NSUserNotification {
+    private func createUserNotification(processName: String, averagedTimePeriod: NSTimeInterval, cpuLoad: CPUPercentage) -> NSUserNotification {
         let notificationString = "\(processName) has been using \(cpuLoad) CPU for \(averagedTimePeriod) seconds."
         let notification = NSUserNotification()
         notification.title = "Runaway Process Monitor"
-        notification.subtitle = notificationString
+        notification.informativeText = notificationString
         return notification
     }
     
-    private func pruneProcesses(processes: ProcessHash, remainingSamples: Int) -> ProcessHash {
+    private func pruneSamples(processes: ProcessHash, remainingSamples: Int) -> ProcessHash {
         let processesArray = processes.map { (processId: ProcessID, process: Process) -> (ProcessID, Process) in
             var outProcess = process
             outProcess.pruneSamples(remainingSamples)
@@ -210,21 +168,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let outProcesses = Dictionary(processesArray)
         return outProcesses
     }
+    
+    private func repeatingTimer(interval: NSTimeInterval, leeway: NSTimeInterval, start: dispatch_time_t = DISPATCH_TIME_NOW, queue: dispatch_queue_t = dispatch_get_main_queue(), action: dispatch_block_t) -> dispatch_source_t {
+            let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
+            guard timer != nil else { fatalError("Could not create timer.") }
+            
+            func nanoseconds(seconds: NSTimeInterval) -> UInt64 {
+                enum Static { static let Multiplier = Double(NSEC_PER_SEC) }
+                
+                return UInt64(seconds * Static.Multiplier)
+            }
+            
+            dispatch_source_set_event_handler(timer, action)
+            dispatch_source_set_timer(timer, start, nanoseconds(interval), nanoseconds(leeway))
+            
+            dispatch_resume(timer)
+            
+            return timer
+    }
+}
+
+struct RawProcess {
+    let processId: ProcessID
+    let name: String
+    let sample: CPUPercentage
 }
 
 struct Process {
-    let processId: ProcessID // Int32
+    let processId: ProcessID
     let name: String
     var samples: [CPUPercentage] // TODO: Possibly created bounded FIFO queue
     var lastAlertAt: NSDate?
 }
 
 extension Process {
-    init(application: NSRunningApplication) {
-        let processId = Int(application.processIdentifier)
-        self.processId = processId
-        self.name = application.localizedName ?? "Process ID: \(processId)"
-        self.samples = []
+    init(rawProcess: RawProcess) {
+        self.processId = rawProcess.processId
+        self.name = rawProcess.name
+        self.samples = [rawProcess.sample]
         self.lastAlertAt = nil
     }
     
