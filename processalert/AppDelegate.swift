@@ -8,8 +8,6 @@
 
 import Cocoa
 
-typealias RawProcesses = [RawProcess]
-
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 

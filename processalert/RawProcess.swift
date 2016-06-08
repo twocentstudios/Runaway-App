@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias RawProcesses = [RawProcess]
+
 struct RawProcess {
     let processId: ProcessID
     let name: String
