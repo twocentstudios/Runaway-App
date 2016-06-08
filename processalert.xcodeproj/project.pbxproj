@@ -28,7 +28,6 @@
 		348CDBC11D024A280030523A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		348CDBC41D024A280030523A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		348CDBC61D024A280030523A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		348CDBCC1D0282D50030523A /* processalert-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "processalert-Bridging-Header.h"; sourceTree = "<group>"; };
 		348CDBCD1D0743E60030523A /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		348CDBCF1D0744110030523A /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		348CDBD11D0744B40030523A /* RawProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawProcess.swift; sourceTree = "<group>"; };
@@ -74,7 +73,6 @@
 				348CDBBF1D024A280030523A /* AppDelegate.swift */,
 				348CDBDB1D077BC90030523A /* StatusMenuController.swift */,
 				348CDBDD1D078D200030523A /* PreferencesWindow.swift */,
-				348CDBDE1D078D200030523A /* PreferencesWindow.xib */,
 				348CDBD91D0749A40030523A /* Settings.swift */,
 				348CDBCD1D0743E60030523A /* Process.swift */,
 				348CDBD71D0747ED0030523A /* ProcessHash.swift */,
@@ -82,10 +80,10 @@
 				348CDBCF1D0744110030523A /* Dictionary.swift */,
 				348CDBD31D07454E0030523A /* Shell.swift */,
 				348CDBD51D0745910030523A /* Timer.swift */,
-				348CDBC11D024A280030523A /* Assets.xcassets */,
 				348CDBC31D024A280030523A /* MainMenu.xib */,
+				348CDBDE1D078D200030523A /* PreferencesWindow.xib */,
+				348CDBC11D024A280030523A /* Assets.xcassets */,
 				348CDBC61D024A280030523A /* Info.plist */,
-				348CDBCC1D0282D50030523A /* processalert-Bridging-Header.h */,
 			);
 			path = processalert;
 			sourceTree = "<group>";
@@ -279,7 +277,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.processalert;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/processalert/processalert-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Debug;
 		};
@@ -292,7 +290,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.processalert;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/processalert/processalert-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
