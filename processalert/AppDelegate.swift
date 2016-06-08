@@ -87,8 +87,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func createUserNotification(processName: String, averagedTimePeriod: NSTimeInterval, cpuLoad: CPUPercentage, cpuThreshold: CPUPercentage) -> NSUserNotification {
+        let cpuString = String(format:"%.1f", cpuLoad)
         let notificationTitle = "\(processName) using over \(cpuThreshold)% CPU"
-        let notificationText = "Average \(Int(cpuLoad))% CPU for the last \(Int(averagedTimePeriod)) seconds."
+        let notificationText = "Average \(cpuString)% CPU for the last \(Int(averagedTimePeriod)) seconds. "
         let notification = NSUserNotification()
         notification.title = notificationTitle
         notification.informativeText = notificationText
