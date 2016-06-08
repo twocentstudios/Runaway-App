@@ -20,17 +20,17 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F0z-JX-Cv5">
+        <window title="Runaway App Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="471" height="268"/>
+            <rect key="contentRect" x="196" y="240" width="481" height="635"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="471" height="268"/>
+                <rect key="frame" x="0.0" y="0.0" width="481" height="635"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="514-cO-w3i">
-                        <rect key="frame" x="31" y="222" width="97" height="17"/>
+                        <rect key="frame" x="31" y="435" width="97" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="CPU threshold:" id="uLR-jP-ra7">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -38,14 +38,14 @@
                         </textFieldCell>
                     </textField>
                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Qn-GH-OKg">
-                        <rect key="frame" x="132" y="210" width="254" height="25"/>
+                        <rect key="frame" x="132" y="423" width="254" height="25"/>
                         <sliderCell key="cell" continuous="YES" alignment="left" minValue="5" maxValue="100" doubleValue="90" tickMarkPosition="below" numberOfTickMarks="20" allowsTickMarkValuesOnly="YES" sliderType="linear" id="12N-Nu-R0v"/>
                         <connections>
                             <action selector="cpuSliderChanged:" target="-2" id="8fk-Ix-htv"/>
                         </connections>
                     </slider>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xPf-Y7-2eA">
-                        <rect key="frame" x="394" y="216" width="59" height="17"/>
+                        <rect key="frame" x="394" y="429" width="59" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="RAj-dA-8mT">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -53,7 +53,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kzJ-7P-th0">
-                        <rect key="frame" x="27" y="167" width="101" height="17"/>
+                        <rect key="frame" x="27" y="337" width="101" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Update interval:" id="qQG-bi-BgC">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -61,14 +61,14 @@
                         </textFieldCell>
                     </textField>
                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blj-0D-8GE">
-                        <rect key="frame" x="132" y="155" width="254" height="25"/>
+                        <rect key="frame" x="132" y="325" width="254" height="25"/>
                         <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="10" doubleValue="4" tickMarkPosition="below" numberOfTickMarks="4" allowsTickMarkValuesOnly="YES" sliderType="linear" id="nD5-hf-7Yt"/>
                         <connections>
                             <action selector="updateIntervalSliderChanged:" target="-2" id="A8b-jU-jAB"/>
                         </connections>
                     </slider>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GLt-lO-cy7">
-                        <rect key="frame" x="394" y="164" width="59" height="17"/>
+                        <rect key="frame" x="394" y="334" width="59" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="vcd-aQ-SwX">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -76,22 +76,22 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gtk-Sr-mqO">
-                        <rect key="frame" x="58" y="111" width="70" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Alert after:" id="c8K-fA-rRD">
+                        <rect key="frame" x="51" y="247" width="77" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Notify after:" id="c8K-fA-rRD">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KaU-Su-rqa">
-                        <rect key="frame" x="132" y="101" width="254" height="25"/>
+                        <rect key="frame" x="132" y="237" width="254" height="25"/>
                         <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="3" maxValue="10" doubleValue="4" tickMarkPosition="below" numberOfTickMarks="8" allowsTickMarkValuesOnly="YES" sliderType="linear" id="Zm4-tw-uI4"/>
                         <connections>
                             <action selector="alertAfterSliderChanged:" target="-2" id="7aR-Ij-PuT"/>
                         </connections>
                     </slider>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gIc-10-8KN">
-                        <rect key="frame" x="394" y="110" width="59" height="17"/>
+                        <rect key="frame" x="394" y="246" width="59" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="hbB-Jl-5xY">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -99,34 +99,89 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZDF-Vi-Bhd">
-                        <rect key="frame" x="53" y="54" width="75" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Reset after:" id="5UL-us-ojx">
+                        <rect key="frame" x="15" y="153" width="113" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Notify again after:" id="5UL-us-ojx">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d7W-pe-aWY">
-                        <rect key="frame" x="132" y="45" width="254" height="25"/>
+                        <rect key="frame" x="132" y="144" width="254" height="25"/>
                         <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="120" doubleValue="1" tickMarkPosition="below" numberOfTickMarks="24" sliderType="linear" id="VCF-h0-oeM"/>
                         <connections>
                             <action selector="resetAfterSliderChanged:" target="-2" id="yuR-ND-QZ3"/>
                         </connections>
                     </slider>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M5y-Ju-FDz">
-                        <rect key="frame" x="394" y="54" width="59" height="17"/>
+                        <rect key="frame" x="394" y="153" width="59" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="bnV-p5-CCr">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RBM-Xk-EWJ">
+                        <rect key="frame" x="132" y="290" width="254" height="28"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="How often Runaway App samples the CPU usage of each running app." id="sXR-lx-cOB">
+                            <font key="font" metaFont="toolTip"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DXL-ej-cmZ">
+                        <rect key="frame" x="132" y="197" width="254" height="28"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="How long an app must be above the CPU threshold before Runaway App will notify you." id="250-Zz-7g6">
+                            <font key="font" metaFont="toolTip"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YaB-UH-J1M">
+                        <rect key="frame" x="132" y="104" width="254" height="28"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="How long Runaway App will wait before notifying you again about a runaway app." id="yHS-PW-Khb">
+                            <font key="font" metaFont="toolTip"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ai0-9H-1eK">
+                        <rect key="frame" x="132" y="374" width="254" height="42"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Runaway App will alert you to apps that use more than this amount of CPU in a given time period." id="YsD-JB-UlU">
+                            <font key="font" metaFont="toolTip"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mZC-OJ-LRL">
+                        <rect key="frame" x="27" y="571" width="426" height="44"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Runaway App monitors programs for abnormally high CPU usage over a period of time and alerts you with a notification." id="nZS-kC-sfa">
+                            <font key="font" metaFont="systemSemibold" size="14"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Pk-tD-0oT">
+                        <rect key="frame" x="-2" y="20" width="485" height="14"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title=" © 2016 twocentstudios" id="Ksl-mL-k44">
+                            <font key="font" metaFont="toolTip"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="spE-xk-bnU">
+                        <rect key="frame" x="56" y="475" width="368" height="95"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ExampleNotification" id="R17-Gw-rgR"/>
+                    </imageView>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="300.5" y="280"/>
+            <point key="canvasLocation" x="305.5" y="463.5"/>
         </window>
     </objects>
+    <resources>
+        <image name="ExampleNotification" width="716" height="194"/>
+    </resources>
 </document>
