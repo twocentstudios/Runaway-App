@@ -12,18 +12,26 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="processalert" customModuleProvider="target">
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="processalert" customModuleProvider="target"/>
+        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+        <customObject id="bMh-FD-ccV" userLabel="StatusMenuController" customClass="StatusMenuController" customModule="processalert" customModuleProvider="target">
             <connections>
-                <outlet property="statusMenu" destination="oUh-QR-Tzd" id="3IZ-pO-NEr"/>
+                <outlet property="statusMenu" destination="oUh-QR-Tzd" id="Lmx-Wr-jDV"/>
             </connections>
         </customObject>
-        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu id="oUh-QR-Tzd">
             <items>
+                <menuItem title="Preferences" id="0MV-cX-U0Y" userLabel="Preferences">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="preferencesClicked:" target="bMh-FD-ccV" id="8IB-A9-I8e"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="L96-yb-QnB"/>
                 <menuItem title="Quit" id="DF5-fe-nSB" userLabel="Quit">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
-                        <action selector="quitClicked:" target="Voe-Tx-rLC" id="yw3-rg-Ovf"/>
+                        <action selector="quitClicked:" target="bMh-FD-ccV" id="NoZ-fP-QI1"/>
                     </connections>
                 </menuItem>
             </items>

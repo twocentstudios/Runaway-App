@@ -13,33 +13,40 @@ typealias RawProcesses = [RawProcess]
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @IBOutlet weak var statusMenu: NSMenu!
-
-    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
-
     var settings = Settings()
     var processes: ProcessHash = [:]
     
-    var timer: RepeatingTimer!
+    var timer: RepeatingTimer?
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
-        statusItem.title = "Runaway Train"
-        statusItem.menu = statusMenu
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        Settings.writeInitialDefaults(userDefaults)
+        let settings = Settings(defaults: userDefaults)
         
-        let notificationCenter = NSUserNotificationCenter.defaultUserNotificationCenter()
+        let userNotificationCenter = NSUserNotificationCenter.defaultUserNotificationCenter()
+        startTimer(settings, userNotificationCenter: userNotificationCenter)
         
-        timer = RepeatingTimer(interval: settings.delay, leeway: 0, queue: dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) { [unowned self] in
-            let (updatedProcesses, pendingNotifications) = self.tick(self.processes, settings: self.settings)
-            
-            self.processes = updatedProcesses
-            
-            pendingNotifications.forEach { notificationCenter.deliverNotification($0) }
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserverForName(NSUserDefaultsDidChangeNotification, object: nil, queue: nil) { [weak self] _ in
+            let updatedSettings = Settings(defaults: userDefaults)
+            self?.startTimer(updatedSettings, userNotificationCenter: userNotificationCenter)
         }
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
-        timer.cancel()
+        timer?.cancel()
+    }
+    
+    func startTimer(settings: Settings, userNotificationCenter: NSUserNotificationCenter) {
+        timer?.cancel()
+        timer = RepeatingTimer(interval: settings.updateInterval, leeway: 0, queue: dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) { [unowned self] in
+            let (updatedProcesses, pendingNotifications) = self.tick(self.processes, settings: self.settings)
+            
+            self.processes = updatedProcesses
+            
+            pendingNotifications.forEach { userNotificationCenter.deliverNotification($0) }
+        }
     }
     
     @IBAction func quitClicked(sender: NSMenuItem) {
@@ -51,13 +58,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let rawProcesses = ProcessStatus.parse(psOutput)
         let mergedProcesses = mergeRawProcesses(processes, rawProcesses: rawProcesses)
         let filtered = filterLatestSamples(mergedProcesses, numberOfSamples: settings.numberOfSamples, threshold: settings.cpuThreshold)
-        let (updatedProcesses, pendingNotifications) = outgoingNotifications(mergedProcesses, overProcesses: filtered, alertThresholdMinutes: settings.alertThresholdMinutes, delay: settings.delay, numberOfSamples: settings.numberOfSamples, cpuThreshold: settings.cpuThreshold)
+        let (updatedProcesses, pendingNotifications) = outgoingNotifications(mergedProcesses, overProcesses: filtered, alertThresholdMinutes: settings.alertThresholdMinutes, updateInterval: settings.updateInterval, numberOfSamples: settings.numberOfSamples, cpuThreshold: settings.cpuThreshold)
         let prunedSamplesFromProcesses = pruneSamples(updatedProcesses, remainingSamples: settings.remainingSamples)
         
         return (prunedSamplesFromProcesses, pendingNotifications)
     }
     
-    private func outgoingNotifications(processes: ProcessHash, overProcesses: [ProcessID: CPUPercentage], alertThresholdMinutes: Int, delay: NSTimeInterval, numberOfSamples: Int, cpuThreshold: CPUPercentage) -> (ProcessHash, [NSUserNotification]) {
+    private func outgoingNotifications(processes: ProcessHash, overProcesses: [ProcessID: CPUPercentage], alertThresholdMinutes: Int, updateInterval: NSTimeInterval, numberOfSamples: Int, cpuThreshold: CPUPercentage) -> (ProcessHash, [NSUserNotification]) {
         let now = NSDate()
         var updatedProcesses = processes
         var pendingNotifications: [NSUserNotification] = []
@@ -68,7 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             // Configure local notification
             let notification = createUserNotification(
                 getProcessName(processes, processId: processId),
-                averagedTimePeriod: delay * Double(numberOfSamples),
+                averagedTimePeriod: updateInterval * Double(numberOfSamples),
                 cpuLoad: cpuLoad,
                 cpuThreshold: cpuThreshold)
             pendingNotifications.append(notification)

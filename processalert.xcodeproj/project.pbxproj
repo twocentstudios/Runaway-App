@@ -17,6 +17,9 @@
 		348CDBD61D0745910030523A /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD51D0745910030523A /* Timer.swift */; };
 		348CDBD81D0747ED0030523A /* ProcessHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD71D0747ED0030523A /* ProcessHash.swift */; };
 		348CDBDA1D0749A40030523A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBD91D0749A40030523A /* Settings.swift */; };
+		348CDBDC1D077BC90030523A /* StatusMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBDB1D077BC90030523A /* StatusMenuController.swift */; };
+		348CDBDF1D078D200030523A /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348CDBDD1D078D200030523A /* PreferencesWindow.swift */; };
+		348CDBE01D078D200030523A /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348CDBDE1D078D200030523A /* PreferencesWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,9 @@
 		348CDBD51D0745910030523A /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		348CDBD71D0747ED0030523A /* ProcessHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessHash.swift; sourceTree = "<group>"; };
 		348CDBD91D0749A40030523A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		348CDBDB1D077BC90030523A /* StatusMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusMenuController.swift; sourceTree = "<group>"; };
+		348CDBDD1D078D200030523A /* PreferencesWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
+		348CDBDE1D078D200030523A /* PreferencesWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesWindow.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +72,9 @@
 			isa = PBXGroup;
 			children = (
 				348CDBBF1D024A280030523A /* AppDelegate.swift */,
+				348CDBDB1D077BC90030523A /* StatusMenuController.swift */,
+				348CDBDD1D078D200030523A /* PreferencesWindow.swift */,
+				348CDBDE1D078D200030523A /* PreferencesWindow.xib */,
 				348CDBD91D0749A40030523A /* Settings.swift */,
 				348CDBCD1D0743E60030523A /* Process.swift */,
 				348CDBD71D0747ED0030523A /* ProcessHash.swift */,
@@ -140,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				348CDBC21D024A280030523A /* Assets.xcassets in Resources */,
+				348CDBE01D078D200030523A /* PreferencesWindow.xib in Resources */,
 				348CDBC51D024A280030523A /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,6 +167,8 @@
 				348CDBC01D024A280030523A /* AppDelegate.swift in Sources */,
 				348CDBD41D07454E0030523A /* Shell.swift in Sources */,
 				348CDBD61D0745910030523A /* Timer.swift in Sources */,
+				348CDBDF1D078D200030523A /* PreferencesWindow.swift in Sources */,
+				348CDBDC1D077BC90030523A /* StatusMenuController.swift in Sources */,
 				348CDBCE1D0743E60030523A /* Process.swift in Sources */,
 				348CDBD01D0744110030523A /* Dictionary.swift in Sources */,
 			);
