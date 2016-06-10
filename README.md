@@ -2,16 +2,18 @@
 
 Runaway App is a Mac OS X app that runs as a daemon and menubar item. It monitors processes for runaway CPU usage above a specified threshold.
 
+![Preferences Page](https://github.com/twocentstudios/Runaway-App/blob/master/art/screenshot-01.png)
+
 ## Technical
 
 Runaway app uses the `ps` application via an `NSTask` and parses the results. Therefore, it can't be sandboxed.
 
 ## TODOs
 
-[ ] Auto updating
-[ ] More intuitive preferences
-[ ] List of tasks in menubar item
-[ ] Notification links to app
+[ ] Auto updating  
+[ ] More intuitive preferences  
+[ ] List of tasks in menubar item  
+[ ] Notification links to app  
 
 ## License
 
