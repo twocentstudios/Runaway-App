@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindow" customModule="processalert" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindow" customModule="Runaway_App" customModuleProvider="target">
             <connections>
                 <outlet property="alertAfterLabel" destination="gIc-10-8KN" id="wxx-31-pNg"/>
                 <outlet property="alertAfterSlider" destination="KaU-Su-rqa" id="Jvc-Xj-Hlc"/>

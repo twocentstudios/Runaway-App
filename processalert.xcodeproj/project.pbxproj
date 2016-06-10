@@ -23,7 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		348CDBBC1D024A280030523A /* processalert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = processalert.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		348CDBBC1D024A280030523A /* Runaway App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Runaway App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		348CDBBF1D024A280030523A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		348CDBC11D024A280030523A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		348CDBC41D024A280030523A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 		348CDBBD1D024A280030523A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				348CDBBC1D024A280030523A /* processalert.app */,
+				348CDBBC1D024A280030523A /* Runaway App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -91,9 +91,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		348CDBBB1D024A280030523A /* processalert */ = {
+		348CDBBB1D024A280030523A /* Runaway App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 348CDBC91D024A280030523A /* Build configuration list for PBXNativeTarget "processalert" */;
+			buildConfigurationList = 348CDBC91D024A280030523A /* Build configuration list for PBXNativeTarget "Runaway App" */;
 			buildPhases = (
 				348CDBB81D024A280030523A /* Sources */,
 				348CDBB91D024A280030523A /* Frameworks */,
@@ -103,9 +103,9 @@
 			);
 			dependencies = (
 			);
-			name = processalert;
+			name = "Runaway App";
 			productName = processalert;
-			productReference = 348CDBBC1D024A280030523A /* processalert.app */;
+			productReference = 348CDBBC1D024A280030523A /* Runaway App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -136,7 +136,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				348CDBBB1D024A280030523A /* processalert */,
+				348CDBBB1D024A280030523A /* Runaway App */,
 			);
 		};
 /* End PBXProject section */
@@ -275,7 +275,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = processalert/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.processalert;
+				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.runawayapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
@@ -288,7 +288,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = processalert/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.processalert;
+				PRODUCT_BUNDLE_IDENTIFIER = com.twocentstudios.runawayapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
@@ -306,13 +306,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		348CDBC91D024A280030523A /* Build configuration list for PBXNativeTarget "processalert" */ = {
+		348CDBC91D024A280030523A /* Build configuration list for PBXNativeTarget "Runaway App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				348CDBCA1D024A280030523A /* Debug */,
 				348CDBCB1D024A280030523A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
